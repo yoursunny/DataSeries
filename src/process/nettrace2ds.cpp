@@ -103,7 +103,8 @@
 // For TCP stream reassembly: 
 // http://www.circlemud.org/~jelson/software/tcpflow/
 
-#define enable_encrypt_filenames 1
+//#define enable_encrypt_filenames 1
+bool enable_encrypt_filenames = true;
 
 // Do this first to get byteswap things...
 #include <DataSeries/Extent.hpp>
@@ -3319,8 +3320,11 @@ int main(int argc, char **argv) {
     INVARIANT(sizeof(count_names)/sizeof(string) == last_count, "bad");
     // Make it hard to run without encryption; don't want to
     // accidentally do that.
-    INVARIANT(enable_encrypt_filenames || getenv("DISABLE_ENCRYPTION") != NULL, 
-              "enable_encrypt_filenames must be true or DISABLE_ENCRYPTION env variable set");
+    //INVARIANT(enable_encrypt_filenames || getenv("DISABLE_ENCRYPTION") != NULL, 
+    //          "enable_encrypt_filenames must be true or DISABLE_ENCRYPTION env variable set");
+    if (getenv("DISABLE_ENCRYPTION") != NULL) {
+      enable_encrypt_filenames = false;
+    }
 
     if (argc >= 4) {
         bool info = strcmp(argv[1], "--info") == 0;
